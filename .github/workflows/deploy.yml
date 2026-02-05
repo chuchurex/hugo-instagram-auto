@@ -10,6 +10,9 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    env:
+      CLOUDFLARE_API_KEY: ${{ secrets.CF_API_KEY }}
+      CLOUDFLARE_EMAIL: ${{ secrets.CF_EMAIL }}
     steps:
       - uses: actions/checkout@v4
 
@@ -21,8 +24,6 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name hugo-chuchurex
+      - run: npx wrangler@3 pages deploy dist --project-name hugo-chuchurex
+        env:
+          CLOUDFLARE_ACCOUNT_ID: 539dd34492b7046c6050b6471cf94c54
